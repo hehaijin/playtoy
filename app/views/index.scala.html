@@ -1,0 +1,11 @@
+@(employees: Seq[Employee])
+
+@main("Welcome to Play") {
+<h1>Welcome to Play!</h1>
+
+<ul>
+  @for(employee <- employees) {
+  <li>@employee.firstName</li>
+  }
+</ul>
+}
