@@ -31,7 +31,8 @@ class HomeController @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   def index() = Action.async { implicit request: Request[AnyContent] =>
 
     val employees= TableQuery[EmployeeTableDef]
-    def all = db.run(employees.result)
+    val q1=employees.take(5)
+    def all = db.run(q1.result)
   //  val employeesResult= Employees2.listAll
     all.map(employees=> Ok(views.html.index(employees)))
    // Ok(views.html.index())
