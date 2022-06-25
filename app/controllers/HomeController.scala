@@ -35,9 +35,8 @@ class HomeController @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     val employeesAndSalaries=for {
       emp <- employees
       sal <- salaries if sal.salary > 110000
-    } yield emp
-
-    val data= db.run(employeesAndSalaries.take(5).result)
+    } yield (emp.employeeNo, emp.firstName, emp.lastName, sal.salary)
+    val data= db.run(employeesAndSalaries.take(15).result)
     data.map(employees=> Ok(views.html.index(employees)))
   }
 }

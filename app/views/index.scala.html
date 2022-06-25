@@ -1,11 +1,11 @@
-@(employees: Seq[Employee])
+@(employees: Seq[(Int, String, String, Int)])
 
 @main("Welcome to Play") {
 <h1>Welcome to Play!</h1>
 
 <ul>
   @for(employee <- employees) {
-  <li>@employee.firstName</li>
+  <li> @employee._2 @employee._3   @employee._4  </li>
   }
 </ul>
 }
