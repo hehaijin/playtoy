@@ -1,7 +1,6 @@
 package controllers
 
-import models.{EmployeeTableDef, Employees2}
-import models.Employees2.employees
+import models.{EmployeeTableDef, SalaryTableDef}
 
 import javax.inject._
 import play.api._
@@ -9,6 +8,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
 import slick.lifted.TableQuery
+
 import scala.concurrent.ExecutionContext
 import slick.jdbc.MySQLProfile.api._
 
@@ -31,10 +31,13 @@ class HomeController @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   def index() = Action.async { implicit request: Request[AnyContent] =>
 
     val employees= TableQuery[EmployeeTableDef]
-    val q1=employees.take(5)
-    def all = db.run(q1.result)
-  //  val employeesResult= Employees2.listAll
-    all.map(employees=> Ok(views.html.index(employees)))
-   // Ok(views.html.index())
+    val salaries= TableQuery[SalaryTableDef]
+    val employeesAndSalaries=for {
+      emp <- employees
+      sal <- salaries if sal.salary > 110000
+    } yield emp
+
+    val data= db.run(employeesAndSalaries.take(5).result)
+    data.map(employees=> Ok(views.html.index(employees)))
   }
 }
