@@ -1,16 +1,8 @@
 package controllers
-
-import models.{EmployeeTableDef, SalaryTableDef}
-
 import javax.inject._
-import play.api._
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.mvc._
-import slick.jdbc.JdbcProfile
-import slick.lifted.TableQuery
-
+import services.Repo
 import scala.concurrent.ExecutionContext
-import slick.jdbc.MySQLProfile.api._
 
 
 /**
@@ -18,8 +10,8 @@ import slick.jdbc.MySQLProfile.api._
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, val cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
+class HomeController @Inject()(val repo: Repo,  cc: ControllerComponents)(implicit ec: ExecutionContext)
+  extends AbstractController(cc)  {
 
   /**
    * Create an Action to render an HTML page.
@@ -29,14 +21,6 @@ class HomeController @Inject()(protected val dbConfigProvider: DatabaseConfigPro
    * a path of `/`.
    */
   def index() = Action.async { implicit request: Request[AnyContent] =>
-
-    val employees= TableQuery[EmployeeTableDef]
-    val salaries= TableQuery[SalaryTableDef]
-    val employeesAndSalaries=for {
-      emp <- employees
-      sal <- salaries if emp.employeeNo === sal.employeeNo && sal.salary > 100000
-    } yield (emp.employeeNo, emp.firstName, emp.lastName, sal.salary)
-    val data= db.run(employeesAndSalaries.sortBy(_._4.desc).take(15).result)
-    data.map(employees=> Ok(views.html.index(employees)))
+    repo.getAll.map(list => Ok(views.html.index(list)))
   }
 }
