@@ -28,10 +28,17 @@ class HomeController @Inject()(val repo: Repo,  cc: ControllerComponents)(implic
   }
 
 
+  def graphqlHandlerStatic = Action.async { implicit request =>
+    val query = graphql"{ employees{employeeNo}  }"
+    val result = Executor.execute(SchemaDefinition.schema,  query, repo)
+    result.map(r => Ok(r.toString))
+  }
+
   def graphqlHandler = Action.async { implicit request =>
     val query = graphql"{ employees{employeeNo}  }"
     val result = Executor.execute(SchemaDefinition.schema,  query, repo)
     result.map(r => Ok(r.toString))
   }
+
 
 }

@@ -24,4 +24,8 @@ class Repo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) ext
     db.run(employees.take(10).result)
   }
 
+  def listSalaries={
+    db.run(salaries.take(10).result)
+  }
+
 }
