@@ -8,7 +8,7 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.MySQLProfile.api._
 
 
-case class Salary(val EmployeeNo : Int , val salary: Int)
+case class Salary(val employeeNo : Int , val salary: Int)
 
 class SalaryTableDef(tag: Tag) extends Table[Salary](tag, None, "salaries") {
   def employeeNo= column[Int]("emp_no");

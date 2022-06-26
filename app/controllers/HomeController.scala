@@ -1,7 +1,10 @@
 package controllers
 import javax.inject._
 import play.api.mvc._
-import services.Repo
+import sangria.execution.Executor
+import sangria.macros.LiteralGraphQLStringContext
+import services.{Repo, SchemaDefinition}
+
 import scala.concurrent.ExecutionContext
 
 
@@ -23,4 +26,12 @@ class HomeController @Inject()(val repo: Repo,  cc: ControllerComponents)(implic
   def index() = Action.async { implicit request: Request[AnyContent] =>
     repo.getAll.map(list => Ok(views.html.index(list)))
   }
+
+
+  def graphqlHandler = Action.async { implicit request =>
+    val query = graphql"{ employees{employeeNo}  }"
+    val result = Executor.execute(SchemaDefinition.schema,  query, repo)
+    result.map(r => Ok(r.toString))
+  }
+
 }

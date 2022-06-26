@@ -19,4 +19,9 @@ class Repo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) ext
     } yield (emp.employeeNo, emp.firstName, emp.lastName, sal.salary)
     db.run(employeesAndSalaries.sortBy(_._4.desc).take(15).result)
   }
+
+  def listEmployees= {
+    db.run(employees.take(10).result)
+  }
+
 }

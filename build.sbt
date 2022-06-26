@@ -21,3 +21,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick-evolutions" % "5.0.2",
   "mysql" % "mysql-connector-java" % "8.0.15",
 )
+
+libraryDependencies += "org.sangria-graphql" %% "sangria" % "2.0.0"
+libraryDependencies += "org.sangria-graphql" %% "sangria-relay" % "2.0.0"
+libraryDependencies += "org.sangria-graphql" %% "sangria-circe" % "1.3.2"
